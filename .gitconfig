@@ -1,11 +1,15 @@
-[user]
-    name  = Jeremy Greenwood
-    email = jeremymgreenwood@gmail.com
-    
-[core]
-	# Note: if notepad++ is in a different directory, either edit the path below or create a link at the specified directory
-    editor = \"C:/Program Files (x86)/Notepad++/notepad++.exe\" -multiInst -notabbar -nosession -noPlugin
-    autocrlf = true
+[include]
+    path = ~/.gitconfig-local
+    # Note: the above file is intended to contain the following example info:
+    #[user]
+    #    name  = <your name>
+    #    email = <your email>
+    #    
+    # Typical windows settings:
+    #[core]
+    #    # Note: if notepad++ is in a different directory, either edit the path below or create a link at the specified directory
+    #    editor = \"C:/Program Files (x86)/Notepad++/notepad++.exe\" -multiInst -notabbar -nosession -noPlugin
+    #    autocrlf = true
     
 [alias]
     a    = add
