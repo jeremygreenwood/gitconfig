@@ -21,8 +21,8 @@
     fa   = fetch -a
     po   = pull origin
     pom  = pull origin master
-	rb   = rebase
-	rbi  = rebase -i
+    rb   = rebase
+    rbi  = rebase -i
     rcim = commit --amend -m    # overwrite last commit message (recommit)
     rh   = reset --hard
     ri   = reset --merge        # reset index
