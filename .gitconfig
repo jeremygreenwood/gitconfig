@@ -24,6 +24,7 @@
     ci   = commit
     cim  = commit -m
     ciam = commit -am
+    d    = diff
     fa   = fetch -a
     plo  = pull origin
     plom = pull origin master
@@ -31,6 +32,7 @@
     psom = push origin master
     rb   = rebase
     rbi  = rebase -i
+    rbim = rebase -i master
     rcim = commit --amend -m    # overwrite last commit message (recommit)
     rh   = reset --hard
     ri   = reset --merge        # reset index
