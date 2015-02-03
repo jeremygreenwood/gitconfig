@@ -18,12 +18,15 @@
     ah	 = add ./*.h            # add all .h files in current directory and its subdirectories
     au   = add -u
     br	 = branch
-    bra  = branch -a
+    bra  = branch --all
+    brm  = branch --move
     co   = checkout
     cob  = checkout -b
     ci   = commit
     cim  = commit -m
-    ciam = commit -am
+    ciam = commit --all -m
+    cp   = cherry-pick
+    cpn  = cherry-pick --no-commit
     d    = diff
     fa   = fetch -a
     plo  = pull origin
