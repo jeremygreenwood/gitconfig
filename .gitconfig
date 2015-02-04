@@ -22,8 +22,14 @@
     co   = checkout
     cob  = checkout -b
     ci   = commit
+    cis  = commit --squash=HEAD~1
+    cif  = commit --fixup=HEAD~1
     cim  = commit -m
-    ciam = commit -am
+    cims = commit --squash=HEAD~1 -m
+    cimf = commit --fixup=HEAD~1 -m
+    ciam = commit --all -m
+    ciams= commit --all --squash=HEAD~1 -m
+    ciamf= commit --all --fixup=HEAD~1 -m
     d    = diff
     fa   = fetch -a
     plo  = pull origin
@@ -34,7 +40,7 @@
     rbi  = rebase -i
     rbim = rebase -i master
     rcim = commit --amend -m    # overwrite last commit message (recommit)
-    rh   = reset --hard
+    rhd  = reset --hard
     ri   = reset --merge        # reset index
     ri2w = reset --mixed        # reset index to working tree
     rw   = checkout .           # reset working tree (perform from top of tree)
@@ -44,6 +50,9 @@
     st   = status
     su   = submodule update
     suir = submodule update --init --recursive
+	
+	# Update specific branches
+	um   = !git fetch origin master && git checkout master && git pull origin master && git checkout @{-1}
     updt = !git checkout master && git fetch origin && git rebase origin/master && git submodule update --init --recursive
 
 [color]
@@ -55,4 +64,6 @@
     added     = green
     changed   = red
     untracked = cyan
-    
+	
+[rebase]
+    autosquash = true
