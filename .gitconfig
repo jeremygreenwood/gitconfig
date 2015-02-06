@@ -12,32 +12,38 @@
     #    autocrlf = true
     
 [alias]
+    #---------------------------------------------------------------
+    # Simple aliases
+    #---------------------------------------------------------------
     a    = add
     ac	 = add ./*.c            # add all .c files in current directory and its subdirectories
     acpp = add ./*.cpp          # add all .cpp files in current directory and its subdirectories
     ah	 = add ./*.h            # add all .h files in current directory and its subdirectories
-    au   = add -u
+    au   = add --update
     br	 = branch
     bra  = branch --all
     brm  = branch --move
     co   = checkout
     cob  = checkout -b
+    com  = checkout master
     ci   = commit
     cim  = commit -m
     ciam = commit --all -m
     cp   = cherry-pick
     cpn  = cherry-pick --no-commit
     d    = diff
-    fa   = fetch -a
+    fa   = fetch --all
+    fom  = fetch origin master
     plo  = pull origin
     plom = pull origin master
     pso  = push origin
     psom = push origin master
     rb   = rebase
-    rbi  = rebase -i
-    rbim = rebase -i master
+    rbi  = rebase --interactive
+    rbim = rebase --interactive master
     rcim = commit --amend -m    # overwrite last commit message (recommit)
-    rh   = reset --hard
+    rf   = checkout --          # reset file
+    rhd  = reset --hard         # reset all changes
     ri   = reset --merge        # reset index
     ri2w = reset --mixed        # reset index to working tree
     rw   = checkout .           # reset working tree (perform from top of tree)
@@ -46,8 +52,16 @@
     rred       = !git rw        # reset alias, consistent with git bash coloring scheme
     st   = status
     su   = submodule update
+    sui  = submodule update --init
     suir = submodule update --init --recursive
-    updt = !git checkout master && git fetch origin && git rebase origin/master && git submodule update --init --recursive
+    sur  = submodule update --recursive
+
+    #---------------------------------------------------------------
+    # Multi-command aliases
+    #---------------------------------------------------------------
+    # Update master branch and revert to current branch
+    # Notes: not tested for use when master is currrent branch or when working tree is dirty
+    um   = !git fetch origin master && git checkout master && git pull origin master && git checkout @{-1}
 
 [color]
     branch = auto
@@ -58,4 +72,7 @@
     added     = green
     changed   = red
     untracked = cyan
+	
+[rebase]
+    autosquash = true
     
