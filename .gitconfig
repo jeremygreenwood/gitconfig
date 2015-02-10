@@ -29,6 +29,9 @@
     ci   = commit
     cim  = commit -m
     ciam = commit --all -m
+    ciam = commit --all -m
+    cifh = commit --fixup=HEAD
+    cish = commit --squash=HEAD
     cp   = cherry-pick
     cpn  = cherry-pick --no-commit
     d    = diff
@@ -60,7 +63,7 @@
     # Multi-command aliases
     #---------------------------------------------------------------
     # Update master branch and revert to current branch
-    # Notes: not tested for use when master is currrent branch or when working tree is dirty
+    # Notes: this does not work when tree is dirty
     um   = !git fetch origin master && git checkout master && git pull origin master && git checkout @{-1}
 
 [color]
