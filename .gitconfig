@@ -64,6 +64,22 @@
     # Update master branch and revert to current branch
     # Notes: this does not work when tree is dirty
     um   = !git fetch origin master && git checkout master && git pull origin master && git checkout @{-1}
+    
+    # Commit a fixup of previous commit with informational message
+    # Notes: this will set the commit to be "fixup" (automatically squashed without comments) when performing an interactive rebase
+    cifhm = !sh -c 'git commit --fixup=HEAD && LAST_COMMIT=$(git log -n 1 --format=%B) && git commit --amend -m \"$LAST_COMMIT\n\n${1}\"' -
+    # Same as above, alias acronym being "commit squash" as the message will be dropped after performing interactive rebase
+    cis   = !sh -c 'git cifhm \"${1}\"' -
+    
+    # Commit all tracked changes as a fixup of previous commit with informational message
+    ciafhm= !sh -c 'git add --update && git cifhm \"${1}\"' -
+    # Same as above, alias acronym being "commit all squash"
+    cias  = !sh -c 'git ciafhm \"${1}\"' -
+    
+    # Commit a squash of previous commit with commit message to remain after interactive rebase
+    cism  = !sh -c 'git commit --squash=HEAD -m \"${1}\"' -
+    # Commit all tracked changes as a squash of previous commit
+    ciasm= !sh -c 'git add --update && git cism \"${1}\"' -
 
 [color]
     branch = auto
