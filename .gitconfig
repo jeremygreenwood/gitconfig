@@ -29,7 +29,6 @@
     ci   = commit
     cim  = commit -m
     ciam = commit --all -m
-    ciam = commit --all -m
     cifh = commit --fixup=HEAD
     cish = commit --squash=HEAD
     cp   = cherry-pick
