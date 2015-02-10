@@ -68,7 +68,7 @@
     # Commit a fixup of previous commit with informational message
     # Notes: this will set the commit to be "fixup" (automatically squashed without comments) when performing an interactive rebase
     cifhm = !sh -c 'git commit --fixup=HEAD && LAST_COMMIT=$(git log -n 1 --format=%B) && git commit --amend -m \"$LAST_COMMIT\n\n${1}\"' -
-    cis   = !sh -c 'git cifhm' -
+    cis   = !sh -c 'git cifhm \"${1}\"' -
 
 [color]
     branch = auto
