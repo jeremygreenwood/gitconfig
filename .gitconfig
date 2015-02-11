@@ -40,6 +40,9 @@
     d    = diff
     fa   = fetch --all
     fom  = fetch origin master
+    lol  = log --graph --decorate --pretty=oneline --abbrev-commit
+    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+    lolm = log --graph --decorate --pretty=oneline --abbrev-commit HEAD master
     plo  = pull origin
     plom = pull origin master
     pso  = push origin
