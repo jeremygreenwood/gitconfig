@@ -18,9 +18,9 @@
     a    = add
     ac	 = add ./*.c            # add all .c files in current directory and its subdirectories
     acpp = add ./*.cpp          # add all .cpp files in current directory and its subdirectories
-    ah	 = add ./*.h            # add all .h files in current directory and its subdirectories
+    ah   = add ./*.h            # add all .h files in current directory and its subdirectories
     au   = add --update
-    br	 = branch
+    br   = branch
     bra  = branch --all
     brm  = branch --move
     co   = checkout
@@ -74,9 +74,13 @@
     
     # Commit a fixup of previous commit with informational message
     # Notes: this will set the commit to be "fixup" (automatically squashed without comments) when performing an interactive rebase
-    cifm  = !sh -c 'git commit --fixup=HEAD && LAST_COMMIT=$(git log -n 1 --format=%B) && git commit --amend -m \"$LAST_COMMIT\n\n${1}\"' -
+    cifm = !sh -c 'git commit --fixup=HEAD && LAST_COMMIT=$(git log -n 1 --format=%B) && git commit --amend -m \"$LAST_COMMIT\n\n${1}\"' -
     # Commit all tracked changes as a fixup of previous commit with informational message
     ciafm = !sh -c 'git add --update && git cifm \"${1}\"' -
+    
+    # Blame functionality- finds a given file path(s) and blames a single line or between a start and end line
+    # Usage: git bl <filename> <start> [end]
+    bl   =  !sh -c 'blame.sh $@' -
 
 [color]
     branch = auto
