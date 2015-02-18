@@ -79,8 +79,9 @@
     ciafm = !sh -c 'git add --update && git cifm \"${1}\"' -
     
     # Blame functionality- finds a given file path(s) and blames a single line or between a start and end line
-    # Usage: git bl <filename> <start> [end]
-    bl   =  !sh -c 'blame.sh $@' -
+    # Usage: git bl <filename> [start] [end]
+    # Notes: this requires creating a symbolic link in user home directory pointing to repository file "blame.sh"
+    bl   =  !sh -c '~/blame.sh $@' -
 
 [color]
     branch = auto
