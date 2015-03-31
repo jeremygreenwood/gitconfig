@@ -68,27 +68,33 @@
     #---------------------------------------------------------------
     # Multi-command aliases
     #---------------------------------------------------------------
-    # Update master branch and revert to current branch
-    # Notes: this does not work when tree is dirty
-    um   = !git fetch origin master && git checkout master && git pull origin master && git checkout @{-1}
+    # Add all tracked files to index and show git status
+    au   = !git add --update && git status
+    
+    # Blame functionality- finds a given file path(s) and blames a single line or between a start and end line
+    # Usage: git bl <filename> [start] [end]
+    # Notes: this requires creating a symbolic link in user home directory pointing to repository file "blame.sh"
+    #        this uses an incorrect directory from git bash if in a subdirectory from where git bash is launched
+    bl   =  !sh -c '~/blame.sh $@' -
     
     # Commit a fixup of previous commit with informational message
     # Notes: this will set the commit to be "fixup" (automatically squashed without comments) when performing an interactive rebase
     cifm = !sh -c 'git commit --fixup=HEAD && LAST_COMMIT=$(git log -n 1 --format=%B) && git commit --amend -m \"$LAST_COMMIT\n\n${1}\"' -
     # Commit all tracked changes as a fixup of previous commit with informational message
     ciafm = !sh -c 'git add --update && git cifm \"${1}\"' -
-    
-    # Blame functionality- finds a given file path(s) and blames a single line or between a start and end line
-    # Usage: git bl <filename> [start] [end]
-    # Notes: this requires creating a symbolic link in user home directory pointing to repository file "blame.sh"
-	#        this uses an incorrect directory from git bash if in a subdirectory from where git bash is launched
-    bl   =  !sh -c '~/blame.sh $@' -
+	
+    # Push current branch to origin repository
+    psoc = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH' -
+	
+    # Push current branch to origin repository and prefix with personal branch path
+    psocp = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH:personal/greenwoodj/$CUR_BRANCH' -
 	
     # Reset Eclipse project files and show git status
     re   = !git reset .project .cproject && git checkout -- .project .cproject && git status
 	
-    # Add all tracked files to index and show git status
-    au   = !git add --update && git status
+    # Update master branch and revert to current branch
+    # Notes: this does not work when tree is dirty
+    um   = !git fetch origin master && git checkout master && git pull origin master && git checkout @{-1}
 
 [color]
     branch = auto
