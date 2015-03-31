@@ -83,6 +83,9 @@
     # Commit all tracked changes as a fixup of previous commit with informational message
     ciafm = !sh -c 'git add --update && git cifm \"${1}\"' -
 	
+    # Create a new branch with prefix of personal branch path
+    cobp = !sh -c 'git checkout -b personal/greenwoodj/$@' -
+	
     # Push current branch to origin repository
     psoc = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH' -
 	
