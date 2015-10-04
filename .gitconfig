@@ -66,7 +66,7 @@
     sur  = submodule update --recursive
 
     #---------------------------------------------------------------
-    # Multi-command aliases
+    # Complex and multi-command aliases
     #---------------------------------------------------------------
     # Add all tracked files to index and show git status
     au   = !git add --update && git status
@@ -84,13 +84,19 @@
     ciafm = !sh -c 'git add --update && git cifm \"${1}\"' -
 	
     # Create a new branch with prefix of personal branch path
-    cobp = !sh -c 'git checkout -b personal/greenwoodj/$@' -
+    cobp = !sh -c 'git checkout -b $( git gpbp )/$@' -
+    
+    # Get personal branch name, which is the last name and first initial as one word, all lowercase
+    gpbn = !git config user.name | awk '{ print tolower( $NF substr( $1, 0, 1 ) ) }'
+    
+    # Get personal branch prefix
+    gpbp = !sh -c 'echo personal/$( git gpbn )'
 	
     # Push current branch to origin repository
     psoc = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH' -
 	
     # Push current branch to origin repository and prefix with personal branch path
-    psocp = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH:personal/greenwoodj/$CUR_BRANCH' -
+    psocp = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH:$( git gpbp )/$CUR_BRANCH' -
 	
     # Reset Eclipse project files and show git status
     re   = !git reset .project .cproject && git checkout -- .project .cproject && git status
