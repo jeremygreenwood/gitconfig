@@ -98,6 +98,9 @@
     # Push current branch to origin repository and prefix with personal branch path
     psocp = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH:$( git gpbp )/$CUR_BRANCH' -
 	
+    # Push current branch to master of origin repository
+    psocm = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH:master' -
+	
     # Reset Eclipse project files and show git status
     re   = !git reset .project .cproject && git checkout -- .project .cproject && git status
 	
