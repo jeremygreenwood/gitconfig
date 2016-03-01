@@ -92,6 +92,12 @@
     # Get personal branch prefix
     gpbp = !sh -c 'echo personal/$( git gpbn )'
 	
+	# Show git log for two commit (SHA) arguments to show order committed
+	lcmpcc = !sh -c 'git log | grep \"${1}\\|${2}\"' -
+	
+	# Show git log for given commit (SHA) argument and most recent commit for given filename argument to show order committed
+	lcmpcf = !sh -c 'git log | grep \"${1}\\|$( git log -n 1 --pretty=format:%H -- */${2} )\"' -
+	
     # Push current branch to origin repository
     psoc = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH' -
 	
