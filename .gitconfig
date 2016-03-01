@@ -77,6 +77,11 @@
     #        this uses an incorrect directory from git bash if in a subdirectory from where git bash is launched
     bl   =  !sh -c '~/blame.sh $@' -
     
+    # Branch list all personal branches (l -> local, r -> remote)
+    # Note: these requires additional \'s to escape the escapes!
+    brapl = !sh -c 'git for-each-ref --sort=-committerdate refs/heads/ | sed \"s,.*refs/heads/\\(.*\\),\\1,\" | grep $( git gpbn )' -
+    brapr = !sh -c 'git for-each-ref --sort=-committerdate refs/remotes/origin/ | sed \"s,.*refs/remotes/origin/\\(.*\\),\\1,\" | grep $( git gpbn )' -
+    
     # Commit a fixup of previous commit with informational message
     # Notes: this will set the commit to be "fixup" (automatically squashed without comments) when performing an interactive rebase
     cifm = !sh -c 'git commit --fixup=HEAD && LAST_COMMIT=$(git log -n 1 --format=%B) && git commit --amend -m \"$LAST_COMMIT\n\n${1}\"' -
@@ -90,7 +95,7 @@
     gpbn = !git config user.name | awk '{ print tolower( $NF substr( $1, 0, 1 ) ) }'
     
     # Get personal branch prefix
-    gpbp = !sh -c 'echo personal/$( git gpbn )'
+    gpbp = !sh -c 'echo personal/$( git gpbn )' -
 	
 	# Show git log for two commit (SHA) arguments to show order committed
 	lcmpcc = !sh -c 'git log | grep \"${1}\\|${2}\"' -
