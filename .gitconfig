@@ -111,6 +111,17 @@
 	
     # Push current branch to master of origin repository
     psocm = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH:master' -
+    
+    # Push nothing to current branch of origin repository (removes branch on remote)
+    psorc = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin :$CUR_BRANCH' -
+    
+    # Push nothing to specified branch of origin repository (removes branch on remote)
+    psorb = !sh -c 'git push origin :${1}' -
+    
+    # TODO alias to force push current branch to remote
+    # 1. create temporary branch of current on server
+    # 2. remove current branch on server
+    # 3. rename temporary branch on server to match the current branch
 	
     # Reset Eclipse project files and show git status
     re   = !git reset .project .cproject && git checkout -- .project .cproject && git status
