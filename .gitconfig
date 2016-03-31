@@ -16,16 +16,16 @@
     # Simple aliases
     #---------------------------------------------------------------
     a    = add
-    ac	 = add ./*.c            # add all .c files in current directory and its subdirectories
-    acpp = add ./*.cpp          # add all .cpp files in current directory and its subdirectories
-    ah   = add ./*.h            # add all .h files in current directory and its subdirectories
+    ac	 = add *.c              # add all .c files in current directory
+    acpp = add *.cpp            # add all .cpp files in current directory
+    ah   = add *.h              # add all .h files in current directory
     br   = branch
     bra  = branch --all
     brm  = branch --move
     co   = checkout
     cob  = checkout -b
     com  = checkout master
-    cop  = checkout @{-1}
+    cop  = checkout @{-1}		# checkout previously checked out branch
     ci   = commit
     cim  = commit -m
     ciam = commit --all -m
@@ -38,11 +38,12 @@
     cp   = cherry-pick
     cpn  = cherry-pick --no-commit
     d    = diff
+    f    = fetch
     fa   = fetch --all
     fom  = fetch origin master
-    lol  = log --graph --decorate --pretty=oneline --abbrev-commit
+    lol  = log --decorate --pretty=oneline --abbrev-commit
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-    lolm = log --graph --decorate --pretty=oneline --abbrev-commit HEAD master
+    lolm = log --decorate --pretty=oneline --abbrev-commit HEAD master
     plo  = pull origin
     plom = pull origin master
     pso  = push origin
@@ -53,10 +54,8 @@
     rcim = commit --amend -m    # overwrite last commit message (recommit)
     rf   = checkout --          # reset file
     rhd  = reset --hard         # reset all changes
-    ri   = reset --merge        # reset index
     ri2w = reset --mixed        # reset index to working tree
     rw   = checkout .           # reset working tree (perform from top of tree)
-    rgreen     = !git ri        # reset alias, consistent with git bash coloring scheme
     rgreen2red = !git ri2w      # reset alias, consistent with git bash coloring scheme
     rred       = !git rw        # reset alias, consistent with git bash coloring scheme
     st   = status
@@ -75,7 +74,7 @@
     # Usage: git bl <filename> [start] [end]
     # Notes: this requires creating a symbolic link in user home directory pointing to repository file "blame.sh"
     #        this uses an incorrect directory from git bash if in a subdirectory from where git bash is launched
-    bl   =  !sh -c '~/blame.sh $@' -
+    bl   = !sh -c '~/blame.sh $@' -
     
     # Branch list all personal branches (l -> local, r -> remote)
     # Note: these requires additional \'s to escape the escapes!
@@ -118,10 +117,11 @@
     # Push nothing to specified branch of origin repository (removes branch on remote)
     psorb = !sh -c 'git push origin :${1}' -
     
-    # TODO alias to force push current branch to remote
-    # 1. create temporary branch of current on server
-    # 2. remove current branch on server
-    # 3. rename temporary branch on server to match the current branch
+    # TODO create alias to force push current branch to remote, useful for defeating git hooks which fail git push's --force flag
+	# accomplish this alias using three steps to ensure branch is always present on server to protect against data loss:
+    #   1. create temporary branch of current on server
+    #   2. remove current branch on server
+    #   3. rename temporary branch on server to match the current branch
 	
     # Reset Eclipse project files and show git status
     re   = !git reset .project .cproject && git checkout -- .project .cproject && git status
