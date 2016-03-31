@@ -67,12 +67,12 @@
     #---------------------------------------------------------------
     # Complex and multi-command aliases
     #---------------------------------------------------------------
-	# Display a list of aliases
-	aliases = !git config --list | grep '^alias' | grep -v ^aliases | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
+    # Display a list of aliases
+    aliases = !git config --list | grep '^alias' | grep -v ^aliases | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
 	
-	# Display a list of aliases beginning with argument string
-	aliasesb = !sh -c 'git aliases | grep ^$1' -
-	
+    # Display a list of aliases beginning with argument string
+    aliasesb = !sh -c 'git aliases | grep ^$1' -
+
     # Add all tracked files to index and show git status
     au   = !git add --update && git status
     
@@ -81,14 +81,14 @@
     # Notes: this requires creating a symbolic link in user home directory pointing to repository file "blame.sh"
     #        this uses an incorrect directory from git bash if in a subdirectory from where git bash is launched
     bl   = !sh -c '~/blame.sh $@' -
-    
+
     # Branch list all personal branches (l -> local, r -> remote)
     # Note: these requires additional \'s to escape the escapes!
     brapl = !sh -c 'git for-each-ref --sort=-committerdate refs/heads/ | sed \"s,.*refs/heads/\\(.*\\),\\1,\" | grep $( git gpbn )' -
     brapr = !sh -c 'git for-each-ref --sort=-committerdate refs/remotes/origin/ | sed \"s,.*refs/remotes/origin/\\(.*\\),\\1,\" | grep $( git gpbn )' -
 	
-	# Display the number of commits for each file to see which files are changed most often
-	churn = !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print "count,file"} {print $1 "," $2}'
+    # Display the number of commits for each file to see which files are changed most often
+    churn = !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print "count,file"} {print $1 "," $2}'
     
     # Commit a fixup of previous commit with informational message
     # Notes: this will set the commit to be "fixup" (automatically squashed without comments) when performing an interactive rebase
@@ -98,21 +98,21 @@
 	
     # Create a new branch with prefix of personal branch path
     cobp = !sh -c 'git checkout -b $( git gpbp )/$@' -
-    
+
     # Get current branch
     gcb  = !git rev-parse --abbrev-ref HEAD
-    
+
     # Get personal branch name, which is the last name and first initial as one word, all lowercase
     gpbn = !git config user.name | awk '{ print tolower( $NF substr( $1, 0, 1 ) ) }'
-    
+
     # Get personal branch prefix
     gpbp = !sh -c 'echo personal/$( git gpbn )' -
 	
-	# Show git log for two commit (SHA) arguments to show order committed
-	lcmpcc = !sh -c 'git log | grep \"${1}\\|${2}\"' -
+    # Show git log for two commit (SHA) arguments to show order committed
+    lcmpcc = !sh -c 'git log | grep \"${1}\\|${2}\"' -
 	
-	# Show git log for given commit (SHA) argument and most recent commit for given filename argument to show order committed
-	lcmpcf = !sh -c 'git log | grep \"${1}\\|$( git log -n 1 --pretty=format:%H -- */${2} )\"' -
+    # Show git log for given commit (SHA) argument and most recent commit for given filename argument to show order committed
+    lcmpcf = !sh -c 'git log | grep \"${1}\\|$( git log -n 1 --pretty=format:%H -- */${2} )\"' -
 	
     # Push current branch to origin repository
     psoc = !sh -c 'git push origin $( git gcb )' -
@@ -121,11 +121,11 @@
     psocb = !sh -c 'git push origin $( git gcb ):${1}' -
     
     # Force push current branch to remote, useful for defeating git hooks which fail git push's --force flag (usefule for backing up to server after rebase)
-	# Accomplish this alias using three steps to ensure branch is always present on server to protect against data loss:
+    # Accomplish this alias using three steps to ensure branch is always present on server to protect against data loss:
     #   1. create temporary branch of current on server
     #   2. remove current branch on server
     #   3. rename temporary branch on server to match the current branch by pushing the desired branch name and then removing the temporary branch
-	psocf = !sh -c 'TEMP_BRANCH=$( git gcb )_temp && git psocb $TEMP_BRANCH && git psorc && git psoc && git psorb $TEMP_BRANCH' -
+    psocf = !sh -c 'TEMP_BRANCH=$( git gcb )_temp && git psocb $TEMP_BRANCH && git psorc && git psoc && git psorb $TEMP_BRANCH' -
 	
     # Push current branch to master of origin repository
     psocm = !git psocb master
@@ -158,4 +158,6 @@
 	
 [rebase]
     autosquash = true
-    
+	
+[branch]
+    autoSetupRebase = always
