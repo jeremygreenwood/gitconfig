@@ -99,6 +99,9 @@
     # Create a new branch with prefix of personal branch path
     cobp = !sh -c 'git checkout -b $( git gpbp )/$@' -
     
+    # Get current branch
+    gcb  = !git rev-parse --abbrev-ref HEAD
+    
     # Get personal branch name, which is the last name and first initial as one word, all lowercase
     gpbn = !git config user.name | awk '{ print tolower( $NF substr( $1, 0, 1 ) ) }'
     
@@ -112,25 +115,29 @@
 	lcmpcf = !sh -c 'git log | grep \"${1}\\|$( git log -n 1 --pretty=format:%H -- */${2} )\"' -
 	
     # Push current branch to origin repository
-    psoc = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH' -
+    psoc = !sh -c 'git push origin $( git gcb )' -
 	
-    # Push current branch to origin repository and prefix with personal branch path
-    psocp = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH:$( git gpbp )/$CUR_BRANCH' -
+    # Push current branch to specified branch of origin repository
+    psocb = !sh -c 'git push origin $( git gcb ):${1}' -
+    
+    # Force push current branch to remote, useful for defeating git hooks which fail git push's --force flag (usefule for backing up to server after rebase)
+	# Accomplish this alias using three steps to ensure branch is always present on server to protect against data loss:
+    #   1. create temporary branch of current on server
+    #   2. remove current branch on server
+    #   3. rename temporary branch on server to match the current branch by pushing the desired branch name and then removing the temporary branch
+	psocf = !sh -c 'TEMP_BRANCH=$( git gcb )_temp && git psocb $TEMP_BRANCH && git psorc && git psoc && git psorb $TEMP_BRANCH' -
 	
     # Push current branch to master of origin repository
-    psocm = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin $CUR_BRANCH:master' -
-    
-    # Push nothing to current branch of origin repository (removes branch on remote)
-    psorc = !sh -c 'CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD) && git push origin :$CUR_BRANCH' -
+    psocm = !git psocb master
+	
+    # Push current branch to origin repository and prefix with personal branch path
+    psocp = !sh -c 'git psocb $( git gpbp )/$( git gcb )' -
     
     # Push nothing to specified branch of origin repository (removes branch on remote)
     psorb = !sh -c 'git push origin :${1}' -
     
-    # TODO create alias to force push current branch to remote, useful for defeating git hooks which fail git push's --force flag
-	# accomplish this alias using three steps to ensure branch is always present on server to protect against data loss:
-    #   1. create temporary branch of current on server
-    #   2. remove current branch on server
-    #   3. rename temporary branch on server to match the current branch
+    # Push nothing to current branch of origin repository (removes branch on remote)
+    psorc = !sh -c 'git psorb $( git gcb )' -
 	
     # Reset Eclipse project files and show git status
     re   = !git reset .project .cproject && git checkout -- .project .cproject && git status
