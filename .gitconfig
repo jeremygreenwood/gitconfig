@@ -13,7 +13,7 @@
     
 [alias]
     #---------------------------------------------------------------
-    # Simple aliases
+    # Shorthand/simple aliases
     #---------------------------------------------------------------
     a    = add
     ac	 = add *.c              # add all .c files in current directory
@@ -52,17 +52,22 @@
     rbi  = rebase --interactive
     rbim = rebase --interactive master
     rcim = commit --amend -m    # overwrite last commit message (recommit)
-    rf   = checkout --          # reset file
-    rhd  = reset --hard         # reset all changes
-    ri2w = reset --mixed        # reset index to working tree
-    rw   = checkout .           # reset working tree (perform from top of tree)
-    rgreen2red = !git ri2w      # reset alias, consistent with git bash coloring scheme
-    rred       = !git rw        # reset alias, consistent with git bash coloring scheme
+    rds  = !git reset-demote-staged
+    rf   = !git reset-file
+    rhd  = reset --hard
+    ru   = !git reset-unstaged
     st   = status
     su   = submodule update
     sui  = submodule update --init
     suir = submodule update --init --recursive
     sur  = submodule update --recursive
+
+    #---------------------------------------------------------------
+    # Other simple aliases
+    #---------------------------------------------------------------
+    reset-demote-staged = reset --mixed     # demote all staged changes to unstaged changes
+    reset-file          = checkout --       # this only works for unstaged changes
+    reset-unstaged      = checkout .
 
     #---------------------------------------------------------------
     # Complex and multi-command aliases
