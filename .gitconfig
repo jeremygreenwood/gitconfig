@@ -67,6 +67,12 @@
     #---------------------------------------------------------------
     # Complex and multi-command aliases
     #---------------------------------------------------------------
+	# Display a list of aliases
+	aliases = !git config --list | grep '^alias' | grep -v ^aliases | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
+	
+	# Display a list of aliases beginning with argument string
+	aliasesb = !sh -c 'git aliases | grep ^$1' -
+	
     # Add all tracked files to index and show git status
     au   = !git add --update && git status
     
@@ -80,6 +86,9 @@
     # Note: these requires additional \'s to escape the escapes!
     brapl = !sh -c 'git for-each-ref --sort=-committerdate refs/heads/ | sed \"s,.*refs/heads/\\(.*\\),\\1,\" | grep $( git gpbn )' -
     brapr = !sh -c 'git for-each-ref --sort=-committerdate refs/remotes/origin/ | sed \"s,.*refs/remotes/origin/\\(.*\\),\\1,\" | grep $( git gpbn )' -
+	
+	# Display the number of commits for each file to see which files are changed most often
+	churn = !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print "count,file"} {print $1 "," $2}'
     
     # Commit a fixup of previous commit with informational message
     # Notes: this will set the commit to be "fixup" (automatically squashed without comments) when performing an interactive rebase
