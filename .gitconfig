@@ -38,6 +38,9 @@
     cp   = cherry-pick
     cpn  = cherry-pick --no-commit
     d    = diff
+    dc   = diff --cached
+    dw   = diff --word-diff="color"
+    dwc  = diff --word-diff="color" --cached
     f    = fetch
     fa   = fetch --all
     fom  = fetch origin master
@@ -97,13 +100,8 @@
     poll-files-commits = !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print "count,file"} {print $1 "," $2}'
     
     # Display the number of author line changes for each person to see who is active
-    # TODO fix issue with using [']'s
-    #poll-author-line-changes = !sh -c 'git ls-files -z | xargs -0n1 git blame -w | perl -n -e '/^.*?\((.*?)\s+[\d]{4}/ && print $1,"\n"' | sort -f | uniq -c | sort -n' -
-    #poll-author-line-changes = !sh -c 'git ls-files -z | xargs -0n1 git blame -w | perl -n -e '/^.*?\((.*?)\s+[\d]{4}/ && print $1,"\n"' | sort -f | uniq -c | sort -n' -
-    # attempt using '\'':
-    #poll-author-line-changes = !sh -c 'git ls-files -z | xargs -0n1 git blame -w | perl -n -e '\''/^.*?\((.*?)\s+[\d]{4}/ && print $1,"\n"'\'' | sort -f | uniq -c | sort -n' -
-    # attempt using \':
-    #poll-author-line-changes = !sh -c 'git ls-files -z | xargs -0n1 git blame -w | perl -n -e \'/^.*?\((.*?)\s+[\d]{4}/ && print $1,"\n"\' | sort -f | uniq -c | sort -n' -
+    # Note: these requires additional \'s to escape the escapes and "'s
+    poll-author-line-changes = !git ls-files -z | xargs -0n1 git blame -w | perl -n -e '/^.*?\\((.*?)\\s+[\\d]{4}/ && print $1,\"\\n\"' | sort -f | uniq -c | sort -n
     
     # Display the number of author commits for each person to see who is active
     poll-author-commits = !git log --all -M -C --format="%an" | sort | grep -v '^$' | uniq -c | sort
