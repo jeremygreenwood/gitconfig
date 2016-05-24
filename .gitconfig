@@ -112,6 +112,9 @@
     # Commit all tracked changes as a fixup of previous commit with informational message
     ciafm = !sh -c 'git add --update && git cifm \"${1}\"' -
 	
+	# Commit undo- reverse last commit and unstage files
+	ciu  = !git reset --soft HEAD^ && git reset --mixed
+	
     # Create a new branch with prefix of personal branch path
     cobp = !sh -c 'git checkout -b $( git gpbp )/$@' -
 
