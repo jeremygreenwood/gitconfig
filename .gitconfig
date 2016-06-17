@@ -158,6 +158,9 @@
     # Push nothing to current branch of origin repository (removes branch on remote)
     psorc = !sh -c 'git psorb $( git gcb )' -
 	
+	# Interactively rebase the last N commits from HEAD
+	rbih = !sh -c 'git rebase --interactive HEAD~${1}' -
+	
     # Reset Eclipse project files and show git status
     re   = !git reset .project .cproject && git checkout -- .project .cproject && git status
 	
