@@ -50,6 +50,7 @@
     plo  = pull origin
     plom = pull origin master
     pso  = push origin
+    pss  = push scratch
     psom = push origin master
     rb   = rebase
     rbi  = rebase --interactive
@@ -139,7 +140,7 @@
     # Push current branch to specified branch of origin repository
     psocb = !sh -c 'git push origin $( git gcb ):${1}' -
     
-    # Force push current branch to remote, useful for defeating git hooks which fail git push's --force flag (usefule for backing up to server after rebase)
+    # Force push current branch to origin repository, useful for defeating git hooks which fail git push's --force flag (usefule for backing up to server after rebase)
     # Accomplish this alias using three steps to ensure branch is always present on server to protect against data loss:
     #   1. create temporary branch of current on server
     #   2. remove current branch on server
@@ -157,6 +158,27 @@
     
     # Push nothing to current branch of origin repository (removes branch on remote)
     psorc = !sh -c 'git psorb $( git gcb )' -
+	
+    # Push current branch to scratch repository
+    pssc = !sh -c 'git push scratch $( git gcb )' -
+	
+    # Push current branch to specified branch of scratch repository
+    psscb = !sh -c 'git push scratch $( git gcb ):${1}' -
+	
+	# Force push current branch to scratch repository
+    psscf = !sh -c 'TEMP_BRANCH=$( git gcb )_temp && git psscb $TEMP_BRANCH && git pssrc && git pssc && git pssrb $TEMP_BRANCH' -
+	
+    # Push current branch to master of scratch repository
+    psscm = !git psscb master
+	
+    # Push current branch to scratch repository and prefix with personal branch path
+    psscp = !sh -c 'git psscb $( git gpbp )/$( git gcb )' -
+    
+    # Push nothing to specified branch of scratch repository (removes branch on remote)
+    pssrb = !sh -c 'git push scratch :${1}' -
+    
+    # Push nothing to current branch of scratch repository (removes branch on remote)
+    pssrc = !sh -c 'git pssrb $( git gcb )' -
 	
 	# Interactively rebase the last N commits from HEAD
 	rbih = !sh -c 'git rebase --interactive HEAD~${1}' -
