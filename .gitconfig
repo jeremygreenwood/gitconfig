@@ -54,6 +54,7 @@
     psom = push origin master
     rb   = rebase
     rbi  = rebase --interactive
+    rbm  = rebase master
     rbim = rebase --interactive master
     rcim = commit --amend -m    # overwrite last commit message (recommit)
     rds  = !git reset-demote-staged
