@@ -117,11 +117,17 @@
 	# Commit undo- reverse last commit and unstage files
 	ciu  = !git reset --soft HEAD^ && git reset --mixed
 	
+    # Create a new branch with prefix of personal integration branch path
+    cobi = !sh -c 'git checkout -b $( git gibp )/$@' -
+    
     # Create a new branch with prefix of personal branch path
     cobp = !sh -c 'git checkout -b $( git gpbp )/$@' -
 
     # Get current branch
     gcb  = !git rev-parse --abbrev-ref HEAD
+
+    # Get integration branch prefix
+    gibp = !sh -c 'echo integration/$( git gpbn )' -
 
     # Get personal branch name, which is the last name and first initial as one word, all lowercase
     gpbn = !git config user.name | awk '{ print tolower( $NF substr( $1, 0, 1 ) ) }'
@@ -148,6 +154,9 @@
     #   3. rename temporary branch on server to match the current branch by pushing the desired branch name and then removing the temporary branch
     psocf = !sh -c 'TEMP_BRANCH=$( git gcb )_temp && git psocb $TEMP_BRANCH && git psorc && git psoc && git psorb $TEMP_BRANCH' -
 	
+    # Push current branch to origin repository and prefix with integration branch path
+    psoci = !sh -c 'git psocb $( git gibp )/$( git gcb )' -
+    
     # Push current branch to master of origin repository
     psocm = !git psocb master
 	
