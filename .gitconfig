@@ -97,16 +97,6 @@
     # Note: these requires additional \'s to escape the escapes!
     brapl = !sh -c 'git for-each-ref --sort=-committerdate refs/heads/ | sed \"s,.*refs/heads/\\(.*\\),\\1,\" | grep $( git gpbn )' -
     brapr = !sh -c 'git for-each-ref --sort=-committerdate refs/remotes/origin/ | sed \"s,.*refs/remotes/origin/\\(.*\\),\\1,\" | grep $( git gpbn )' -
-	
-    # Display the number of commits for each file to see which files are changed most often
-    poll-files-commits = !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print "count,file"} {print $1 "," $2}'
-    
-    # Display the number of author line changes for each person to see who is active
-    # Note: these requires additional \'s to escape the escapes and "'s
-    poll-author-line-changes = !git ls-files -z | xargs -0n1 git blame -w | perl -n -e '/^.*?\\((.*?)\\s+[\\d]{4}/ && print $1,\"\\n\"' | sort -f | uniq -c | sort -n
-    
-    # Display the number of author commits for each person to see who is active
-    poll-author-commits = !git log --all -M -C --format="%an" | sort | grep -v '^$' | uniq -c | sort
     
     # Commit a fixup of previous commit with informational message
     # Notes: this will set the commit to be "fixup" (automatically squashed without comments) when performing an interactive rebase
@@ -122,6 +112,11 @@
     
     # Create a new branch with prefix of personal branch path
     cobp = !sh -c 'git checkout -b $( git gpbp )/$@' -
+    
+    # Continually fetch all until something happens
+	# TODO work in progress
+    # fac  = !sh -c 'while [ \"$( git fetch --all )\" == \"Fetching origin\" ]; do sleep 1; echo -n \".\"; done;' -
+    # fac  = !sh -c 'while [ $( git fetch --all ) == Fetching origin ]; do sleep 1; echo -n .; done;' -
 
     # Get current branch
     gcb  = !git rev-parse --abbrev-ref HEAD
@@ -140,6 +135,22 @@
 	
     # Show git log for given commit (SHA) argument and most recent commit for given filename argument to show order committed
     lcmpcf = !sh -c 'git log | grep \"${1}\\|$( git log -n 1 --pretty=format:%H -- */${2} )\"' -
+    
+    # Create a numbered branch
+    nbc  = !sh -c '~/numbered_branch.sh' -
+    
+    # Remove numbered branches
+    nbr  = !sh -c '~/numbered_branch.sh -r' -
+	
+    # Display the number of commits for each file to see which files are changed most often
+    poll-files-commits = !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print "count,file"} {print $1 "," $2}'
+    
+    # Display the number of author line changes for each person to see who is active
+    # Note: these requires additional \'s to escape the escapes and "'s
+    poll-author-line-changes = !git ls-files -z | xargs -0n1 git blame -w | perl -n -e '/^.*?\\((.*?)\\s+[\\d]{4}/ && print $1,\"\\n\"' | sort -f | uniq -c | sort -n
+    
+    # Display the number of author commits for each person to see who is active
+    poll-author-commits = !git log --all -M -C --format="%an" | sort | grep -v '^$' | uniq -c | sort
 	
     # Push current branch to origin repository
     psoc = !sh -c 'git push origin $( git gcb )' -
