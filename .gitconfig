@@ -114,9 +114,8 @@
     cobp = !sh -c 'git checkout -b $( git gpbp )/$@' -
     
     # Continually fetch all until something happens
-	# TODO work in progress
-    # fac  = !sh -c 'while [ \"$( git fetch --all )\" == \"Fetching origin\" ]; do sleep 1; echo -n \".\"; done;' -
-    # fac  = !sh -c 'while [ $( git fetch --all ) == Fetching origin ]; do sleep 1; echo -n .; done;' -
+	# TODO This doesn't stop fetching after something is received
+    fac  = !sh -c "'while [ \"$( git fetch --all )\" == \"Fetching origin\" ]; do sleep 1; echo -n \".\"; done;'" -
 
     # Get current branch
     gcb  = !git rev-parse --abbrev-ref HEAD
@@ -150,7 +149,9 @@
     poll-author-line-changes = !git ls-files -z | xargs -0n1 git blame -w | perl -n -e '/^.*?\\((.*?)\\s+[\\d]{4}/ && print $1,\"\\n\"' | sort -f | uniq -c | sort -n
     
     # Display the number of author commits for each person to see who is active
-    poll-author-commits = !git log --all -M -C --format="%an" | sort | grep -v '^$' | uniq -c | sort
+    poll-author-commits = !git log --all -M -C --format=%an | sort | grep -v '^$' | uniq -c | sort
+    poll-author-commits-for-file = !sh -c 'git log -M -C --format=%an -- ${GIT_PREFIX}${1} | sort | grep -v \"^$\" | uniq -c | sort' -
+    poll-author-commits-for-dir = !sh -c "'cd ${GIT_PREFIX}; for FILE in $( ls ); do echo $FILE; git poll-author-commits-for-file ${FILE}; done'" -
 	
     # Push current branch to origin repository
     psoc = !sh -c 'git push origin $( git gcb )' -
