@@ -4,13 +4,13 @@
     #[user]
     #    name  = <your name>
     #    email = <your email>
-    #    
+    #
     # Typical windows settings:
     #[core]
     #    # Note: if notepad++ is in a different directory, either edit the path below or create a link at the specified directory
     #    editor = \"C:/Program Files (x86)/Notepad++/notepad++.exe\" -multiInst -notabbar -nosession -noPlugin
     #    autocrlf = true
-    
+
 [alias]
     #---------------------------------------------------------------
     # Shorthand/simple aliases
@@ -80,13 +80,13 @@
     #---------------------------------------------------------------
     # Display a list of aliases
     aliases = !git config --list | grep '^alias' | grep -v ^aliases | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
-	
+
     # Display a list of aliases beginning with argument string
     aliasesb = !sh -c 'git aliases | grep ^$1' -
 
     # Add all tracked files to index and show git status
     au   = !git add --update && git status
-    
+
     # Blame functionality- finds a given file path(s) and blames a single line or between a start and end line
     # Usage: git bl <filename> [start] [end]
     # Notes: this requires creating a symbolic link in user home directory pointing to repository file "blame.sh"
@@ -97,22 +97,22 @@
     # Note: these requires additional \'s to escape the escapes!
     brapl = !sh -c 'git for-each-ref --sort=-committerdate refs/heads/ | sed \"s,.*refs/heads/\\(.*\\),\\1,\" | grep $( git gpbn )' -
     brapr = !sh -c 'git for-each-ref --sort=-committerdate refs/remotes/origin/ | sed \"s,.*refs/remotes/origin/\\(.*\\),\\1,\" | grep $( git gpbn )' -
-    
+
     # Commit a fixup of previous commit with informational message
     # Notes: this will set the commit to be "fixup" (automatically squashed without comments) when performing an interactive rebase
     cifm = !sh -c 'git commit --fixup=HEAD && LAST_COMMIT=$(git log -n 1 --format=%B) && git commit --amend -m \"$LAST_COMMIT\n\n${1}\"' -
     # Commit all tracked changes as a fixup of previous commit with informational message
     ciafm = !sh -c 'git add --update && git cifm \"${1}\"' -
-	
+
 	# Commit undo- reverse last commit and unstage files
 	ciu  = !git reset --soft HEAD^ && git reset --mixed
-	
+
     # Create a new branch with prefix of personal integration branch path
     cobi = !sh -c 'git checkout -b $( git gibp )/$@' -
-    
+
     # Create a new branch with prefix of personal branch path
     cobp = !sh -c 'git checkout -b $( git gpbp )/$@' -
-    
+
     # Continually fetch all until something happens
 	# TODO This doesn't stop fetching after something is received
     fac  = !sh -c "'while [ \"$( git fetch --all )\" == \"Fetching origin\" ]; do sleep 1; echo -n \".\"; done;'" -
@@ -128,102 +128,124 @@
 
     # Get personal branch prefix
     gpbp = !sh -c 'echo personal/$( git gpbn )' -
-	
+
     # Show git log for two commit (SHA) arguments to show order committed
     lcmpcc = !sh -c 'git log | grep \"${1}\\|${2}\"' -
-	
+
     # Show git log for given commit (SHA) argument and most recent commit for given filename argument to show order committed
     lcmpcf = !sh -c 'git log | grep \"${1}\\|$( git log -n 1 --pretty=format:%H -- */${2} )\"' -
-    
+
     # Create a numbered branch
     nbc  = !sh -c '~/numbered_branch.sh' -
-    
+
     # Remove numbered branches
     nbr  = !sh -c '~/numbered_branch.sh -r' -
-	
+
     # Display the number of commits for each file to see which files are changed most often
     poll-files-commits = !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print "count,file"} {print $1 "," $2}'
-    
+
     # Display the number of author line changes for each person to see who is active
     # Note: these requires additional \'s to escape the escapes and "'s
     poll-author-line-changes = !git ls-files -z | xargs -0n1 git blame -w | perl -n -e '/^.*?\\((.*?)\\s+[\\d]{4}/ && print $1,\"\\n\"' | sort -f | uniq -c | sort -n
-    
+
     # Display the number of author commits for each person to see who is active
     poll-author-commits = !git log --all -M -C --format=%an | sort | grep -v '^$' | uniq -c | sort
     poll-author-commits-for-file = !sh -c 'git log -M -C --format=%an -- ${GIT_PREFIX}${1} | sort | grep -v \"^$\" | uniq -c | sort' -
     poll-author-commits-for-dir = !sh -c "'cd ${GIT_PREFIX}; for FILE in $( ls ); do echo $FILE; git poll-author-commits-for-file ${FILE}; done'" -
-	
+
     # Push current branch to origin repository
     psoc = !sh -c 'git push origin $( git gcb )' -
-	
+
     # Push current branch to specified branch of origin repository
     psocb = !sh -c 'git push origin $( git gcb ):${1}' -
-    
+
     # Force push current branch to origin repository, useful for defeating git hooks which fail git push's --force flag (usefule for backing up to server after rebase)
     # Accomplish this alias using three steps to ensure branch is always present on server to protect against data loss:
     #   1. create temporary branch of current on server
     #   2. remove current branch on server
     #   3. rename temporary branch on server to match the current branch by pushing the desired branch name and then removing the temporary branch
     psocf = !sh -c 'TEMP_BRANCH=$( git gcb )_temp && git psocb $TEMP_BRANCH && git psorc && git psoc && git psorb $TEMP_BRANCH' -
-	
+
     # Push current branch to origin repository and prefix with integration branch path
     psoci = !sh -c 'git psocb $( git gibp )/$( git gcb )' -
-    
+
     # Push current branch to master of origin repository
     psocm = !git psocb master
-	
+
     # Push current branch to origin repository and prefix with personal branch path
     psocp = !sh -c 'git psocb $( git gpbp )/$( git gcb )' -
-    
+
     # Push nothing to specified branch of origin repository (removes branch on remote)
     psorb = !sh -c 'git push origin :${1}' -
-    
+
     # Push nothing to current branch of origin repository (removes branch on remote)
     psorc = !sh -c 'git psorb $( git gcb )' -
-	
+
     # Push current branch to scratch repository
     pssc = !sh -c 'git push scratch $( git gcb )' -
-	
+
     # Push current branch to specified branch of scratch repository
     psscb = !sh -c 'git push scratch $( git gcb ):${1}' -
-	
+
 	# Force push current branch to scratch repository
     psscf = !sh -c 'TEMP_BRANCH=$( git gcb )_temp && git psscb $TEMP_BRANCH && git pssrc && git pssc && git pssrb $TEMP_BRANCH' -
-	
+
     # Push current branch to master of scratch repository
     psscm = !git psscb master
-	
+
     # Push current branch to scratch repository and prefix with personal branch path
     psscp = !sh -c 'git psscb $( git gpbp )/$( git gcb )' -
-    
+
     # Push nothing to specified branch of scratch repository (removes branch on remote)
     pssrb = !sh -c 'git push scratch :${1}' -
-    
+
     # Push nothing to current branch of scratch repository (removes branch on remote)
     pssrc = !sh -c 'git pssrb $( git gcb )' -
-	
+
 	# Interactively rebase the last N commits from HEAD
 	rbih = !sh -c 'git rebase --interactive HEAD~${1}' -
-	
+
     # Reset Eclipse project files and show git status
     re   = !git reset .project .cproject && git checkout -- .project .cproject && git status
-	
+
     # Update master branch and revert to current branch
     # Notes: this does not work when tree is dirty
     um   = !git fetch origin master && git checkout master && git pull origin master && git checkout @{-1}
+
+    #---------------------------------------------------------------
+	# Development branch aliases
+	# Note: These are similar to aliases which operate on master
+	# (e.g. psocm) with the exception of gdb which gets a defined
+	# development branch for repository. This requires a file to
+	# exist in the top level directory called .dev_branch.
+    #---------------------------------------------------------------
+    gdb  = !sh -c 'cat $( git rev-parse --show-toplevel )/.dev_branch' -
+    cod  = !sh -c 'git checkout $( git gdb )' -
+    lold = !sh -c 'git log --decorate --pretty=oneline --abbrev-commit HEAD $( git gdb )' -
+	plod = !sh -c 'git pull origin $( git gdb )' -
+	psod = !sh -c 'git push origin $( git gdb )' -
+	rbd  = !sh -c 'git rebase $( git gdb )' -
+	rbid = !sh -c 'git rebase --interactive $( git gdb )' -
+	# Fetch development branch of origin
+    fod  = !sh -c 'git fetch origin $( git gdb )' -
+    # Push current branch to development branch of origin repository
+    psocd = !sh -c 'git psocb $( git gdb )' -
+    # Update development branch and revert to current branch
+    # Notes: this does not work when tree is dirty
+    ud   = !sh -c 'git fetch origin $( git gdb ) && git checkout $( git gdb ) && git pull origin $( git gdb ) && git checkout @{-1}' -
 
 [color]
     branch = auto
     diff   = auto
     ui     = auto
-    
+
 [color "status"]
     added     = green
     changed   = red
     untracked = cyan
-	
+
 [rebase]
     autosquash = true
-	
+
 [branch]
     autoSetupRebase = always
