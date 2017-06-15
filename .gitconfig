@@ -212,36 +212,27 @@
     # Notes: this does not work when tree is dirty
     um   = !git fetch origin master && git checkout master && git pull origin master && git checkout @{-1}
 
-	#-----------------------------------------
+    #---------------------------------------------------------------
 	# Development branch aliases
-	# Note: these are similar to
-	#-----------------------------------------
-    # Get defined development branch for repository
-	# Note: this requires a file to exist in the top level directory called .dev_branch
+	# Note: These are similar to aliases which operate on master
+	# (e.g. psocm) with the exception of gdb which gets a defined
+	# development branch for repository. This requires a file to
+	# exist in the top level directory called .dev_branch.
+    #---------------------------------------------------------------
     gdb  = !sh -c 'cat $( git rev-parse --show-toplevel )/.dev_branch' -
     cod  = !sh -c 'git checkout $( git gdb )' -
     lold = !sh -c 'git log --decorate --pretty=oneline --abbrev-commit HEAD $( git gdb )' -
 	plod = !sh -c 'git pull origin $( git gdb )' -
-# unverified
 	psod = !sh -c 'git push origin $( git gdb )' -
-# unverified
 	rbd  = !sh -c 'git rebase $( git gdb )' -
-# unverified
 	rbid = !sh -c 'git rebase --interactive $( git gdb )' -
 	# Fetch development branch of origin
     fod  = !sh -c 'git fetch origin $( git gdb )' -
-# unverified
-    # Push current branch to development branch of scratch repository
-    psscd = !sh -c 'git psscb $( git gdb )' -
-# unverified
     # Push current branch to development branch of origin repository
     psocd = !sh -c 'git psocb $( git gdb )' -
-# unverified
     # Update development branch and revert to current branch
     # Notes: this does not work when tree is dirty
     ud   = !sh -c 'git fetch origin $( git gdb ) && git checkout $( git gdb ) && git pull origin $( git gdb ) && git checkout @{-1}' -
-
-
 
 [color]
     branch = auto
