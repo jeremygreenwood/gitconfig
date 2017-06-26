@@ -153,6 +153,9 @@
     poll-author-commits-for-file = !sh -c 'git log -M -C --format=%an -- ${GIT_PREFIX}${1} | sort | grep -v \"^$\" | uniq -c | sort' -
     poll-author-commits-for-dir = !sh -c "'cd ${GIT_PREFIX}; for FILE in $( ls ); do echo $FILE; git poll-author-commits-for-file ${FILE}; done'" -
 
+    # Pull current branch from origin repository
+    ploc = !sh -c 'git pull origin $( git gcb )' -
+
     # Push current branch to origin repository
     psoc = !sh -c 'git push origin $( git gcb )' -
 
