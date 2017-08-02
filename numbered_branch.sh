@@ -15,16 +15,24 @@ if [ "$OPTION" == '-r' ]; then
 	REMOVE_OPT='true'
 fi
 
-NUM=1
+NUM=0
 DONE='false'
 while [ $DONE == 'false' ]; do
-	BRANCH_NAME="$( git gcb )_$NUM"
-	git rev-parse --verify $BRANCH_NAME > /dev/null 2>&1
+	if [ $NUM -lt 10 ]; then
+		NUM_STR="0$NUM"
+	else
+		NUM_STR="$NUM"
+	fi
+
+	BRANCH_NAME="$( git gcb )_/$NUM_STR"
+	echo "$BRANCH_NAME"
+
+	git rev-parse --verify "$BRANCH_NAME" > /dev/null 2>&1
 	BRANCH_EXISTS=$?
-	
+
 	if [ $BRANCH_EXISTS -ne 0 ]; then
 		if [ $REMOVE_OPT == 'false' ]; then
-			git branch $BRANCH_NAME
+			git branch "$BRANCH_NAME"
 			if [ $? -eq 0 ]; then
 				echo "Created local branch $BRANCH_NAME"
 			else
@@ -34,13 +42,13 @@ while [ $DONE == 'false' ]; do
 		DONE='true'
 	else
 		if [ $REMOVE_OPT == 'true' ]; then
-			git branch -d $BRANCH_NAME
+			git branch -d "$BRANCH_NAME"
 		fi
 	fi
-	
+
 	if [ $NUM -eq 100 ]; then
 		echo "Warning: found 100 numbered branches"
 	fi
-	
+
 	NUM=$((NUM + 1))
 done
