@@ -1,0 +1,10 @@
+
+TODOs
+ * update "um" alias to not checkout master if working directory is dirty
+ * update poll-author-line-changes to ignore submodules, shouldn't show fatal error from std_err
+ * add alias for total number of lines for each file, and print a total for codebase at the end. should ignore submodules.
+ * Add a batch script to create symlinks in user directory.
+	- alternatively add a path for scripts to be run from, this should live in .gitconfig-local
+		- this will eliminate the need to use symlinks for all scripts (e.g. blame.sh)
+	- it probably shouldn't overwrite any files
+	- it probably needs admin priviledges so would be great if it checked for that.
