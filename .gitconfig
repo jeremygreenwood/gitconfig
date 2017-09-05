@@ -56,7 +56,8 @@
     rbi  = rebase --interactive
     rbm  = rebase master
     rbim = rebase --interactive master
-    rcim = commit --amend -m    # overwrite last commit message (recommit)
+    rci  = commit --amend       # overwrite last commit message (recommit) without inline commit message
+    rcim = commit --amend -m    # overwrite last commit message (recommit) with inline commit message
     rds  = !git reset-demote-staged
     rf   = !git reset-file
     rhd  = reset --hard
@@ -208,6 +209,9 @@
 	# Interactively rebase the last N commits from HEAD
 	rbih = !sh -c 'git rebase --interactive HEAD~${1}' -
 
+	# Interactively rebase HEAD to the ancestor which branched from master
+	rbima = !sh -c 'git rebase --interactive $(git merge-base $(git rev-parse HEAD) $(git rev-parse master))' -
+
     # Reset Eclipse project files and show git status
     re   = !git reset .project .cproject && git checkout -- .project .cproject && git status
 
@@ -229,6 +233,7 @@
 	psod = !sh -c 'git push origin $( git gdb )' -
 	rbd  = !sh -c 'git rebase $( git gdb )' -
 	rbid = !sh -c 'git rebase --interactive $( git gdb )' -
+	rbida = !sh -c 'git rebase --interactive $(git merge-base $(git rev-parse HEAD) $(git rev-parse $( git gdb )))' -
 	# Fetch development branch of origin
     fod  = !sh -c 'git fetch origin $( git gdb )' -
     # Push current branch to development branch of origin repository
