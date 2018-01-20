@@ -224,7 +224,10 @@
 	# Note: These are similar to aliases which operate on master
 	# (e.g. psocm) with the exception of gdb which gets a defined
 	# development branch for repository. This requires a file to
-	# exist in the top level directory called .dev_branch.
+	# exist in the top level directory called .dev_branch. If you
+	# don't want to commit this file to the repository and don't
+	# want it to show up as an untracked file, add '.dev_branch' to
+	# a line in the local gitignore at .git/info/exclude.
     #---------------------------------------------------------------
     gdb  = !sh -c 'cat $( git rev-parse --show-toplevel )/.dev_branch' -
     cod  = !sh -c 'git checkout $( git gdb )' -
@@ -254,6 +257,7 @@
 
 [rebase]
     autosquash = true
+    instructionFormat = [%an] %s
 
 [branch]
     autoSetupRebase = always
