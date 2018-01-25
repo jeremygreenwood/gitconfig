@@ -62,6 +62,8 @@
     rf   = !git reset-file
     rhd  = reset --hard
     ru   = !git reset-unstaged
+    s    = stash
+    sp   = stash pop
     st   = status
     su   = submodule update
     sui  = submodule update --init
@@ -111,6 +113,9 @@
     # Create a new branch with prefix of personal integration branch path
     cobi = !sh -c 'git checkout -b $( git gibp )/$@' -
 
+    # Create a new branch with prefix of personal integration branch path, including number specified in file .int_branch_num (e.g. 2.00)
+    cobin= !sh -c 'git checkout -b $( git gibpn )/$@' -
+
     # Create a new branch with prefix of personal branch path
     cobp = !sh -c 'git checkout -b $( git gpbp )/$@' -
 
@@ -121,8 +126,14 @@
     # Get current branch
     gcb  = !git rev-parse --abbrev-ref HEAD
 
+    # Get integration branch number from file .int_branch_num
+    gibn = !sh -c 'cat $( git rev-parse --show-toplevel )/.int_branch_num' -
+
     # Get integration branch prefix
     gibp = !sh -c 'echo integration/$( git gpbn )' -
+
+    # Get numbered integration branch prefix, requires a file named .int_branch_num which has the desired branch number
+    gibpn= !sh -c 'echo integration/$( git gibn )/$( git gpbn )' -
 
     # Get personal branch name, which is the last name and first initial as one word, all lowercase
     gpbn = !git config user.name | awk '{ print tolower( $NF substr( $1, 0, 1 ) ) }'
