@@ -119,6 +119,9 @@
     # Create a new branch with prefix of personal branch path
     cobp = !sh -c 'git checkout -b $( git gpbp )/$@' -
 
+    # Checkout existing branch/SHA and retain stash
+    cos  = !sh -c 'git stash && git checkout $@ && git stash pop' -
+
     # Continually fetch all until something happens
 	# TODO This doesn't stop fetching after something is received
     fac  = !sh -c "'while [ \"$( git fetch --all )\" == \"Fetching origin\" ]; do sleep 1; echo -n \".\"; done;'" -
