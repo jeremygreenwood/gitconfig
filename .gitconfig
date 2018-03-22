@@ -96,10 +96,12 @@
     #        this uses an incorrect directory from git bash if in a subdirectory from where git bash is launched
     bl   = !sh -c '~/blame.sh $@' -
 
-    # Branch list all personal branches (l -> local, r -> remote)
-    # Note: these requires additional \'s to escape the escapes!
+    # Branch list all personal branches (l -> local, r -> remote, s -> look in all submodules)
+    # Note: these require additional \'s to escape the escapes!
     brapl = !sh -c 'git for-each-ref --sort=-committerdate refs/heads/ | sed \"s,.*refs/heads/\\(.*\\),\\1,\" | grep $( git gpbn )' -
     brapr = !sh -c 'git for-each-ref --sort=-committerdate refs/remotes/origin/ | sed \"s,.*refs/remotes/origin/\\(.*\\),\\1,\" | grep $( git gpbn )' -
+    braprs= !sh -c "'for line in $( grep url .gitmodules | sed \"s/.*= //\" ); do echo $line; git ls-remote --heads $line | grep $( git gpbn ); done'" -
+
 
     # Commit a fixup of previous commit with informational message
     # Notes: this will set the commit to be "fixup" (automatically squashed without comments) when performing an interactive rebase
