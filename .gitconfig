@@ -201,6 +201,9 @@
     # Push nothing to current branch of origin repository (removes branch on remote)
     psorc = !sh -c 'git psorb $( git gcb )' -
 
+    # Push nothing to temporary branch of origin repository (removes branch on remote with same name as current local branch plus "_temp" appended)
+    psort = !sh -c 'git psorb $( git gcb )_temp' -
+
     # Push current branch to scratch repository
     pssc = !sh -c 'git push scratch $( git gcb )' -
 
