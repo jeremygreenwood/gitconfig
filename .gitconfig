@@ -76,7 +76,6 @@
     reset-demote-staged = reset --mixed     # demote all staged changes to unstaged changes
     reset-file          = checkout --       # this only works for unstaged changes
     reset-unstaged      = checkout .
-    show-url            = !git remote show origin | grep URL
 
     #---------------------------------------------------------------
     # Complex and multi-command aliases
@@ -237,6 +236,9 @@
 
     # Reset Eclipse project files and show git status
     re   = !git reset .project .cproject && git checkout -- .project .cproject && git status
+
+	# Show fetch and push URLs for remote repositories
+	show-url = !sh -c "'for line in $( git remote show ); do echo $line; git remote show $line | grep URL; done'" -
 
     # Update master branch and revert to current branch
     # Notes: this does not work when tree is dirty
