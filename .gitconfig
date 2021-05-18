@@ -228,6 +228,9 @@
     # Push nothing to current branch of scratch repository (removes branch on remote)
     pssrc = !sh -c 'git pssrb $( git gcb )' -
 
+    # Push nothing to temporary branch of scratch repository (removes branch on remote with same name as current local branch plus "_temp" appended)
+    pssrt = !sh -c 'git pssrb $( git gcb )_temp' -
+
 	# Interactively rebase the last N commits from HEAD
 	rbih = !sh -c 'git rebase --interactive HEAD~${1}' -
 
