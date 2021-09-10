@@ -123,6 +123,9 @@
     # Checkout existing branch/SHA and retain stash
     cos  = !sh -c 'git stash && git checkout $@ && git stash pop' -
 
+    # Create a numbered debug branch
+    dbc  = !sh -c '~/numbered_branch.sh -d' -
+
     # Continually fetch all until something happens
 	# TODO This doesn't stop fetching after something is received
     fac  = !sh -c "'while [ \"$( git fetch --all )\" == \"Fetching origin\" ]; do sleep 1; echo -n \".\"; done;'" -

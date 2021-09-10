@@ -10,9 +10,14 @@ else
 fi
 
 REMOVE_OPT='false'
+DEBUG_OPT='false'
 
 if [ "$OPTION" == '-r' ]; then
 	REMOVE_OPT='true'
+fi
+
+if [ "$OPTION" == '-d' ]; then
+	DEBUG_OPT='true'
 fi
 
 NUM=0
@@ -24,7 +29,12 @@ while [ $DONE == 'false' ]; do
 		NUM_STR="$NUM"
 	fi
 
-	BRANCH_NAME="$( git gcb )_/$NUM_STR"
+	if [ $DEBUG_OPT == 'false' ]; then
+		BRANCH_NAME="$( git gcb )_/$NUM_STR"
+	else
+		BRANCH_NAME="$( git gcb )_debug_$((NUM + 1))"
+	fi
+
 	echo "$BRANCH_NAME"
 
 	git rev-parse --verify "$BRANCH_NAME" > /dev/null 2>&1
