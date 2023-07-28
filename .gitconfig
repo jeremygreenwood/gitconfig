@@ -292,3 +292,5 @@
 
 [branch]
     autoSetupRebase = always
+[gui]
+	recentrepo = C:/grmn/prj/avtn/gnss/dev
